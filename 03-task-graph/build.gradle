@@ -6,6 +6,12 @@
     5. Declare and configure 'date' task before 'hello'. Run the build and inspect the failure. Fix the problem
     See the DSL reference of Task.dependsOn method to find out what arguments are accepted.
 */
+task date {
+    dependsOn 'hello'
+    doLast {
+        println new Date()
+    }
+}
 
 task hello {
     doLast {
@@ -13,9 +19,15 @@ task hello {
     }   
 }
 
-task date {
+task moreGreetings {
     dependsOn hello
     doLast {
-        println new Date()
+        println "hihihi"
+    }
+}
+
+task setup {
+    doLast {
+        println "setup"
     }
 }

@@ -11,7 +11,7 @@
 */
 
 task startWebServer {
-    
+
 }
 
 task stopWebServer {
@@ -23,13 +23,17 @@ task unitTest {
 }
 
 task integTest {
-    
+    mustRunAfter unitTest
+    dependsOn startWebServer
+    finalizedBy stopWebServer
 }
 
 task funcTest {
-    
+    mustRunAfter unitTest, integTest
+    dependsOn startWebServer
+    finalizedBy stopWebServer
 }
 
 task allTests {
-    
+    dependsOn tasks.matching { it.name.endsWith('Test') }
 }

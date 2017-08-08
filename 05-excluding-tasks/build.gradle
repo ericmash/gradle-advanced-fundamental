@@ -8,10 +8,17 @@
     5. Execute `gradle tasks` with and without `releaseManager` set.
     6. (Optional) Change the code: always create `upload` task
         but use onlyIf method to skip the upload task when `releaseManager` is not set
-*/    
+*/
 
 task generateTestData
 task test { dependsOn generateTestData }
 task assemble
 task build { dependsOn test, assemble }
+
+task upload {
+    onlyIf { System.getProperty('releaseManager') != null }
+    doLast {
+        println "upload"
+    }
+}
 
