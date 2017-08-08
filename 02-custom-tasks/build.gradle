@@ -9,3 +9,34 @@
        
     2. Is there an alternative to using an annotation for adding a task action to a custom task?
 */
+
+class GreetingTask extends DefaultTask {
+    String greeting = "Eric"
+
+    GreetingTask() {
+        def printAgain = new Action<GreetingTask>() {
+            @Override
+            void execute(GreetingTask greetingTask) {
+                println "Hello hello $greeting"
+            }
+        }
+        this.actions << printAgain
+    }
+
+    @TaskAction
+    void print() {
+        println "Hello $greeting"
+    }
+
+    @TaskAction
+    void bye() {
+        println "Bye $greeting"
+    }
+}
+
+task GreetEric(type: GreetingTask) {
+}
+
+task GreetEmily(type: GreetingTask) {
+    greeting = 'Emily'
+}
