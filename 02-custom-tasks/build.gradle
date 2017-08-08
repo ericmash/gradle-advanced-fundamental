@@ -35,8 +35,10 @@ class GreetingTask extends DefaultTask {
 }
 
 task GreetEric(type: GreetingTask) {
+    group = "Greeting"
 }
 
 task GreetEmily(type: GreetingTask) {
+    group = "Greeting"
     greeting = 'Emily'
 }
