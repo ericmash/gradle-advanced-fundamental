@@ -4,7 +4,14 @@
         Hints:
         1. To set a project property on the command line, use `-Pfoo=bar`.
         2. To check if a project property exists, use `project.hasProperty('somePropertyName')`.
-*/    
+*/
+
+gradle.taskGraph.whenReady { graph ->
+    // colon specifies root project only
+    if (graph.hasTask(':upload') && !project.hasProperty('uploadUrl')) {
+        throw new GradleException('property uploadUrl is not set')
+    }
+}
     
 task build {
     doLast {
