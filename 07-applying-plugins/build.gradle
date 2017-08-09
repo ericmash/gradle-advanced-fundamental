@@ -6,4 +6,20 @@
 	5. Execute the task
 	6. Create a custom task type for the plugin, replacing the DefaultTask
         Hint: See the Javadoc reference for org.gradle.api.tasks.TaskContainer to see the different forms of the create() method.
-*/    
+*/
+
+/*apply from: 'plugins/info.gradle'*/
+apply plugin: InfoPlugins
+
+class InfoTask extends DefaultTask {
+  @TaskAction
+  void doInfo() {
+    println "binary: ${project.name}"
+  }
+}
+
+class InfoPlugins implements Plugin<Project> {
+  void apply(Project project) {
+    project.tasks.create('info', InfoTask)
+  }
+}
