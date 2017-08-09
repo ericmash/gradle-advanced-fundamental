@@ -5,4 +5,41 @@
     4. Add a task `copyFiles` that copies all files of the file tree from 1.) into `build/files`.
 
         Hint: `FileTree`, `FileCollection` and `Set<File>` objects are valid inputs for the Copy task.
-*/    
+*/
+
+apply plugin: "base"
+
+def txtTree = fileTree('content').matching { include "**/*.txt" }
+
+
+task showFiles {
+    group "file-tree"
+    doLast {
+        println txtTree.files.name
+    }
+}
+
+task copyManyTimes {
+    doLast {
+        project.copy {
+            from txtTree
+            into "$buildDir/fileTree"
+        }
+        project.copy {
+            from txtTree.files
+            into "$buildDir/files"
+        }
+    }
+}
+
+task copyTree(type: Copy) {
+    group "file-tree"
+    from txtTree
+    into "${buildDir}/filetree"
+}
+
+task copyFiles(type: Copy){
+    group "file-tree"
+    from txtTree.files
+    into "${buildDir}/files"
+}
