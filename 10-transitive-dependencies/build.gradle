@@ -16,6 +16,24 @@ configurations {
 }
 
 dependencies {
-    deps "commons-logging:commons-logging:1.1"
+
+// cmd: gradle dependencyInsight --configuration deps --dependency commons-logging
+
+//    deps("commons-logging:commons-logging:1.1") {
+//        force = true
+//    }
     deps "org.apache.httpcomponents:httpclient:4.0.3"
 }
+
+//configurations.deps {
+//    resolutionStrategy.force "commons-logging:commons-logging:1.1"
+//}
+
+configurations.deps {
+    resolutionStrategy.eachDependency { dep ->
+        if (dep.requested.name == 'commons-logging') {
+            dep.useVersion '1.1'
+        }
+    }
+}
+
