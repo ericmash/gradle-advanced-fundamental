@@ -5,4 +5,17 @@
 
         Hint: To access an Ant property named `foo`, use `ant.properties.foo` or `ant.foo`.
 */    
-    
+
+//ant.importBuild "build.xml"
+//printChecksum.doFirst { println "before checksum" }
+//printChecksum.doLast { println "before checksum" }
+
+task printCheckSum {
+    ant.checksum(property: 'checksumOut') {
+        fileset(dir: '.') {
+            include name: 'agile.txt'
+        }
+    }
+    println ant.checksumOut
+//    println ant.properties.checksumOut
+}
