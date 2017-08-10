@@ -1,0 +1,23 @@
+
+ext {
+    openSourceLicenses = ["LGPL", "GPL", "ASL", "EPL"]
+}
+
+tasks.withType(Zip) {
+    ext {
+        license = null
+        isOpenSource = {
+            license in openSourceLicenses
+        }
+    }
+}
+
+task openSourceZips {
+    dependsOn tasks.withType(Zip).matching { it.isOpenSource() }
+}
+
+task showsOpenSourceZips {
+    doLast {
+        println tasks.withType(Zip).matching { it.isOpenSource() }
+    }
+}

@@ -9,13 +9,12 @@
 */
     
 apply plugin: "base" // Get the defaults for the zip naming and destination
-
-ext {
-    openSourceLicenses = ["LGPL", "GPL", "ASL", "EPL"]
-}
+//apply from: "opensource.gradle"
+apply plugin: LicensePlugin
 
 task freeImages(type: Zip) {
     from "img/free"
+    license.name = "GPL"
 }
 
 task royaltyImages(type: Zip) {
@@ -24,6 +23,7 @@ task royaltyImages(type: Zip) {
 
 task publicDocs(type: Zip) {
     from "docs/public"
+    license.name = "EPL"
 }
 
 task enterpriseDocs(type: Zip) {
@@ -32,10 +32,47 @@ task enterpriseDocs(type: Zip) {
 
 task eclipseLibs(type: Zip) {
     from "libs/eclipse"
+    license.name = "ASL"
 }
 
 task oracleLibs(type: Zip) {
     from "libs/oracle"
+}
+
+class License {
+    String name
+}
+
+class LicensePlugin implements Plugin<Project> {
+    @Override
+    void apply(Project project) {
+        project.with {
+            ext {
+                openSourceLicenses = ["LGPL", "GPL", "ASL", "EPL"]
+                allOpenSourceZips = tasks.withType(Zip).matching { it.isOpenSource() }
+
+            }
+
+            tasks.withType(Zip) {
+                extensions.create("license", License)
+                ext {
+                    isOpenSource = {
+                        license.name in openSourceLicenses
+                    }
+                }
+            }
+
+            task ('openSourceZips') {
+                dependsOn allOpenSourceZips
+            }
+
+            task ('showsOpenSourceZips') {
+                doLast {
+                    println allOpenSourceZips
+                }
+            }
+        }
+    }
 }
 
 
