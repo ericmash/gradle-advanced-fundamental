@@ -1,5 +1,5 @@
 /*
-    1. Run the test task and take a look at the report at build/reports/tests/index.html.
+    1. Run the test task and take a look at the report at build/reports/tests/test/index.html.
     2. Run the tests with different settings for `forkEvery`. What do you see?
     3. Run the tests with different settings for `maxParallelForks`. What do you see?
     4. Annotate a few tests with `@org.junit.Ignore`. Implement a test listener that logs a warning for each skipped test.
@@ -24,6 +24,46 @@ dependencies {
     compile "commons-collections:commons-collections:3.2"
     testCompile "junit:junit:4.11"
 }
+
+test {
+    forkEvery = 30 // start a new test instance
+    maxParallelForks = 8
+
+    ext.slowTestFile = file("${buildDir}/slowTests")
+
+    testLogging {
+        events "failed", "skipped"
+    }
+
+    afterTest { desc, result ->
+        if (result.resultType == TestResult.ResultType.SKIPPED) {
+            println "from listener: ${desc.className}:${desc.name}"
+        }
+    }
+
+    afterTest { desc, result ->
+        long duration = result.endTime - result.startTime
+
+        if (duration > 10) {
+            slowTestFile << "${desc.className}:${desc.name} -> $duration\n"
+        }
+    }
+
+    doFirst {
+        delete(slowTestFile)
+    }
+
+    finalizedBy "showSlowTests"
+}
+
+task showSlowTests {
+    onlyIf { test.slowTestFile.exists() }
+    doLast {
+        "open ${test.slowTestFile}".execute()
+    }
+}
+
+
 
 
 
