@@ -13,6 +13,17 @@
         1. Use the `maven` plugin to publish to the local Maven repository (see the user guide for more information). Don't forget to declare the local Maven repository in the consuming build.
         2. Publishing and consuming from a local Ivy repository works just like for a remote Ivy repository, except that the repository has a `file:///` URL.
 */
+
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+    dependencies {
+        classpath 'org.apache.commons:commons-math:2.1'
+        classpath 'org.gradle.training:decorator:0.1'
+    }
+}
     
 task commonsMath {
     doLast { 
