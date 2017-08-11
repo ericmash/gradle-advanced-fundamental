@@ -57,3 +57,7 @@ task sizeGenerated(type: Size) {
     outputFile = file("${buildDir}/sizeGenerated.txt")
 }
 
+task copyFile(type: Copy) {
+    from textsize
+    into "${buildDir}/copy"
+}
